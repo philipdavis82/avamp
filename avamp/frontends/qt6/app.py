@@ -29,5 +29,6 @@ def main(root_path: str = ""):
         stylesheet = stylesheet.replace("url(:/dark-blue", f"url({stylesheet_path}/")
         app.setStyleSheet(stylesheet)
     main_window = MainWindow(roolt_path=root_path)
+    main_window.setWindowFlags(main_window.windowFlags() | Qt.WindowType.NoTitleBarBackgroundHint | Qt.WindowType.ExpandedClientAreaHint)
     main_window.show()
     app.exec()
