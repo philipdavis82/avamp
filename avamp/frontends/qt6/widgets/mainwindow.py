@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar
 class MainWindow(QWidget):
     def __init__(self,roolt_path: str = ""):
         super().__init__()
-        self.setWindowTitle("VAMP Main Window")
+        self.setWindowTitle("")
         self.resize(800, 600)
 
         self.layout = QGridLayout(self)
