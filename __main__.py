@@ -1,8 +1,9 @@
 import os,sys
-from core.logging import LOG
-from core         import parsers
-from frontends.qt6 import app
+from avamp.core.logging import LOG
+from avamp.core         import parsers
+from avamp.frontends.qt6 import app
 
+import argparse
 
 TEST_DATA = os.path.join(os.path.dirname(__file__), "testdata", "test_data.csv")
 if(not os.path.exists(TEST_DATA)):
@@ -14,9 +15,24 @@ if(not os.path.exists(TEST_DATA)):
     os.system(f"{sys.executable} testdata{os.path.sep}make_test_data.py")
     print("")
 
+
+def create_user_parser():
+    parser = argparse.ArgumentParser(description="VAMP Application")
+    parser.add_argument(
+        "-C", "--path", type=str, default="." ,help="Root path for file browser"
+    )
+    return parser
+
+def parse_args():
+    parser = create_user_parser()
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == "__main__":
     LOG.info("Vamp Init")
-    app.main()
+    args = parse_args()
+    app.main(os.path.abspath(args.path))
 
 
     # LOG.info(f"Vamp Parsers: {parsers.PARSERS}")
