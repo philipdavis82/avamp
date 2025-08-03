@@ -24,18 +24,14 @@ def main(root_path: str = ""):
     # QLoggingCategory.setFilterRules("*.debug=true")
 
     app = QApplication([])
+    app.setApplicationName("Avamp")
     
     
     
     with open(stylesheet, "r") as f:
         stylesheet = f.read()
-        # if(os.path.sep != "/"):
-        #     stylesheet = stylesheet.replace("/", os.path.sep)
         stylesheet = stylesheet.replace("url(':/dark-blue/", f"url('{stylesheet_path}{os.path.sep}")
-        
         stylesheet = stylesheet.replace("\\", "/")
-        print(stylesheet)
-        # LOG.debug(f"Replacing stylesheet path: {stylesheet_path}")
         app.setStyleSheet(stylesheet)
     main_window = MainWindow(roolt_path=root_path)
     main_window.setWindowFlags(main_window.windowFlags() | Qt.WindowType.MSWindowsOwnDC | Qt.WindowType.NoTitleBarBackgroundHint | Qt.WindowType.ExpandedClientAreaHint)
