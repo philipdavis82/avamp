@@ -19,6 +19,23 @@ class SimpleLineInterface (BaseInterface):
         self._y = y
         self._x_name = x_name
         self._y_name = y_name
+
+    def type(self) -> str:
+        """
+        Return the type of the interface.
+
+        :return: The type of the interface.
+        """
+        return "line"
+    
+    def name(self) -> str:
+        """
+        Return the name of the interface.
+
+        :return: The name of the interface.
+        """
+        return self.__class__.__name__
+
     @property
     def x(self):
         """

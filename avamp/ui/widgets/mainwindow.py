@@ -1,5 +1,6 @@
 from avamp.core.logging import LOG
 from avamp.core.parsers import PARSERS
+from avamp.core.event_manager import EventManager, BuiltInEvents
 
 from avamp.ui.widgets.utility.filebrowser import FileBrowser
 from avamp.ui.widgets.utility.datalist    import DataList
@@ -24,6 +25,10 @@ class MainWindow(QWidget):
         self.build_menu_bar()
         self.add_file_browser(roolt_path)
         self.add_data_list()
+
+        EventManager.subscribe(BuiltInEvents.VISUAL_READY,self.createVisual)
+
+        self.activeWindows = []
 
     def build_menu_bar(self):
         LOG.debug("Building menu bar")
@@ -55,6 +60,16 @@ class MainWindow(QWidget):
         self.data_list = DataList(parent=self)
         self.layout.addWidget(self.data_list, 0, 1, 1, 1)
         LOG.info("Data list added to main window layout.")
+
+    def createVisual(self, visual:object, data:str, filename:str):
+        LOG.debug(f"Creating visual for data: {data} from file: {filename}")
+        # Placeholder for creating and displaying the visual
+        # This could involve creating a new window or embedding in the main window
+        window = visual(data=data,filename=filename)
+        window.setWindowTitle(f"Visual - {data} from {filename}")
+        window.resize(600, 400)
+        window.show()
+        self.activeWindows.append(window)
 
     def show(self):
         super().show()

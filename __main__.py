@@ -1,5 +1,6 @@
 import os,sys
-from avamp.core.logging import LOG
+from avamp.core.logging    import LOG
+from avamp.core.dispatcher import VisualDispatcher
 from avamp.core         import parsers
 from avamp.ui           import app
 

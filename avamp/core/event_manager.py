@@ -9,6 +9,8 @@ class BuiltInEvents:
 
     DATA_SElECTED = "data_selected"
 
+    VISUAL_READY  = "visual_selected"
+
 class _EventManager:
     def __init__(self):
         self._event_handlers = {}

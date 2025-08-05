@@ -19,6 +19,15 @@ class BaseInterface:
         """
         raise NotImplementedError("Subclasses must implement this method.")
 
+    def name(self) -> str:
+        """
+        Return the name of the interface.
+        This method should be implemented by subclasses to return a specific name.
+        
+        :return: The name of the interface.
+        """
+        raise NotImplementedError("Subclasses must implement this method.")
+
     def data(self,*args,**kwargs) -> any :
         """
         Return the data associated with the interface.
