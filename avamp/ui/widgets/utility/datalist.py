@@ -3,9 +3,24 @@ from avamp.core.parsers.base_parser import BaseParser
 from avamp.core.parsers import PARSERS,ACTIVE_PARSERS
 from avamp.core.event_manager import EventManager, BuiltInEvents
 
-from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar, QTreeWidget, QTreeWidgetItem
+from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar, QTreeWidget, QTreeWidgetItem, QMenu
+from PyQt6.QtCore import QObject, QEvent, QEventLoop, QPoint
 
 import os
+
+class RightClickedFilter(QObject):
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.Type.ContextMenu:
+            # item = obj.itemAt(event.position().toPoint())
+            item = obj.itemAt(obj.getItemOffsetFromHeader(event.pos()))
+            if item:
+                LOG.info(f"Right-clicked on item: {item.text(0)}")
+                menu = QMenu(obj)
+                action = menu.addAction("Remove Item")
+                action.triggered.connect(lambda: obj.clear(item.text(0)))
+                menu.exec(event.globalPos())
+            return True
+        return super().eventFilter(obj, event)
 
 class DataList(QTreeWidget):
     openParsers: dict[str, BaseParser]
@@ -21,11 +36,18 @@ class DataList(QTreeWidget):
         EventManager.subscribe(BuiltInEvents.FILE_SELECTED, self.update_data_list)
         EventManager.subscribe(BuiltInEvents.FILE_UNLOADED, self.clear)
         
-
         self.itemDoubleClicked.connect(self.on_item_double_clicked)
+        self.installEventFilter(RightClickedFilter(self))
 
         self.treemap     = {}
         self.openParsers = {}
+    
+    def getItemOffsetFromHeader(self, qPoint):
+        """Calculate the offset of the item from the header."""
+        header = self.header()
+        if not header:
+            return qPoint
+        return qPoint - QPoint(0,header.geometry().height())
 
     def clear(self,filename:str=None):
         if(filename):
@@ -38,7 +60,19 @@ class DataList(QTreeWidget):
             self.treemap.clear()
             super().clear()
 
+    def on_item_right_clicked(self, item, column):
+        
+        """Handle right-click events on items."""
+        LOG.info(f"Item right-clicked: {item.text(0)}")
+        menu = QMenu(self)
+        action = menu.addAction("Remove Item")
+        action.triggered.connect(lambda: self.clear(item.text(0)))
+        menu.exec(self.viewport().mapToGlobal(item.pos()))
+
     def update_data_list(self, filename):
+        if filename in self.openParsers:
+            LOG.info(f"Data list already updated for file: {filename}")
+            return
         LOG.info(f"Updating data list with file: {filename}")
         ext = os.path.splitext(filename)[-1]
         # path,name = os.path.split(filename)

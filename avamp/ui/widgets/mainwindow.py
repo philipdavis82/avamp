@@ -47,6 +47,7 @@ class ScrollCtlEventFilter(QObject):
                     self.zoomOut()
                     # Zoom out logic here
                 return True  # Event handled
+            
         elif isinstance(event, QKeyEvent):
             if event.key() == Qt.Key.Key_Plus and event.modifiers() & Qt.KeyboardModifier.ControlModifier:
                 LOG.debug("Zooming in with Ctrl++")
@@ -79,8 +80,6 @@ class MainWindow(QWidget):
 
         self.installEventFilter(ScrollCtlEventFilter(self))
         self.activeWindows = []
-
-
 
     def build_menu_bar(self):
         LOG.debug("Building menu bar")
@@ -118,10 +117,15 @@ class MainWindow(QWidget):
         # Placeholder for creating and displaying the visual
         # This could involve creating a new window or embedding in the main window
         window = visual(data=data,filename=filename)
-        window.setWindowTitle(f"Visual - {data} from {filename}")
         window.resize(600, 400)
         window.show()
         self.activeWindows.append(window)
+
+    def closeEvent(self, event):
+        LOG.debug("Closing main window and all active visual windows.")
+        for window in self.activeWindows:
+            window.close()
+        event.accept()
 
     def show(self):
         super().show()
