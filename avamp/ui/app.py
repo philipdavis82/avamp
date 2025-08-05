@@ -1,5 +1,6 @@
 from avamp.core.logging import LOG
-from avamp.frontends.qt6.widgets.mainwindow import MainWindow
+from avamp.ui.widgets.mainwindow import MainWindow
+from avamp.ui.styles import styles
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QLoggingCategory
@@ -10,11 +11,6 @@ import os
 
 def main(root_path: str = ""):
     # Get stylesheet  
-    stylesheet = os.path.join(os.path.dirname(__file__),"styles","dark-blue","stylesheet.qss")
-    stylesheet_path = os.path.dirname(stylesheet)
-    if not os.path.exists(stylesheet):
-        LOG.error(f"Stylesheet not found: {stylesheet}")
-        return
     
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_Use96Dpi)
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)
@@ -25,14 +21,7 @@ def main(root_path: str = ""):
 
     app = QApplication([])
     app.setApplicationName("Avamp")
-    
-    
-    
-    with open(stylesheet, "r") as f:
-        stylesheet = f.read()
-        stylesheet = stylesheet.replace("url(':/dark-blue/", f"url('{stylesheet_path}{os.path.sep}")
-        stylesheet = stylesheet.replace("\\", "/")
-        app.setStyleSheet(stylesheet)
+    app.setStyleSheet(styles.dark())
     main_window = MainWindow(roolt_path=root_path)
     main_window.setWindowFlags(main_window.windowFlags() | Qt.WindowType.MSWindowsOwnDC | Qt.WindowType.NoTitleBarBackgroundHint | Qt.WindowType.ExpandedClientAreaHint)
     main_window.show()

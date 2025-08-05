@@ -26,6 +26,14 @@ class SimpleCsvParser (BaseParser):
         self._create_interfaces()
         # Parsing CSV file
     
+    def name(self) -> str:
+        """
+        Return the name of the parser.
+
+        :return: The name of the parser.
+        """
+        return self.__class__.__name__
+
     def keys(self) -> list[str]:
         """
         Return the keys of the parser, which are the headers of the CSV file.
@@ -75,10 +83,17 @@ class SimpleCsvParser (BaseParser):
                 y_name=key
             )
             LOG.debug(f"Found Data: {key}")
+    
+    def __iter__(self):
+        """
+        Iterate over the keys items of the parser.
+        :return: An iterator over the keys of the parser.
+        """
+        return iter(self._headers)
 
     
 
 
-PARSER_EXT  = [    "csv",]
+PARSER_EXT  = [    ".csv",]
 PARSER_CLS  = SimpleCsvParser
 PARSER_NAME = SimpleCsvParser.__name__

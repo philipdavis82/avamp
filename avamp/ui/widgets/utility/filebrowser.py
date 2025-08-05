@@ -46,9 +46,9 @@ class FileBrowser(QTreeView):
             LOG.info(f"Directory clicked: {file_path}")
         else:
             LOG.info(f"File clicked: {file_path}")
-            EventManager.trigger_event(
+            EventManager.trigger(
                 BuiltInEvents.FILE_SELECTED,
-                file_path=file_path
+                filename=file_path
             )
             # You can add logic to open the file or perform other actions here
             # For example, you could emit a signal to notify other parts of the application

@@ -10,6 +10,14 @@ class BaseParser:
         """
         # raise NotImplementedError("Subclasses must implement this method.")
 
+    def name(self) -> str:
+        """
+        Return the name of the parser.
+
+        :return: The name of the parser.
+        """
+        raise NotImplementedError("Subclasses must implement this method.")
+
     def keys(self) -> list[str]:
         """
         Return the keys of the parser.

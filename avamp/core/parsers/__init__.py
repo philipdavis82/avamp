@@ -3,6 +3,7 @@ import importlib
 import os,glob
 
 # PARSERS = []
+ACTIVE_PARSERS = {}
 PARSERS = {}
 BASE_SEARCH_PATH = os.path.dirname(__file__)
 LOG.debug(f"{os.path.join(BASE_SEARCH_PATH, "**/*.py")} - Loading parser modules...")
@@ -31,6 +32,9 @@ for file in glob.glob(os.path.join(BASE_SEARCH_PATH, "**/*.py"), recursive=True)
                         "cls": module.PARSER_CLS,
                         "name": module.PARSER_NAME
                     })
+                if( ext not in ACTIVE_PARSERS):
+                    ACTIVE_PARSERS[ext] = module.PARSER_CLS
+                    LOG.debug(f"Active parser for {ext} is now {module.PARSER_NAME}")
         else:
             raise ImportError(f"Module {module_name} does not have required attributes PARSER_EXT and PARSER_CLS and PARSER_NAME.")
 
