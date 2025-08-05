@@ -9,7 +9,56 @@ from avamp.ui.styles import styles
 
 from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui     import QWheelEvent, QKeyEvent
+from PyQt6.QtCore    import Qt, QObject
 
+class ScrollCtlEventFilter(QObject):
+    def zoomIn(self):
+        # app = QApplication.instance()
+        new_font = QApplication.font()
+        new_font.setPointSize( new_font.pointSize() + 2 )
+        new_font.setWeight( int(new_font.pointSize()/4) )
+        QApplication.setFont(new_font)
+        LOG.debug(f"Zoomed in to font size {new_font.pointSize()}")
+        for widget in QApplication.allWidgets():
+            widget.setFont(new_font)
+            widget.update()
+    def zoomOut(self):
+        # app = QApplication.instance()
+        new_font = QApplication.font()
+        new_font.setPointSize( new_font.pointSize() - 2 )
+        new_font.setWeight( int(new_font.pointSize()/4) )
+        QApplication.setFont(new_font)
+        LOG.debug(f"Zoomed out to font size {new_font.pointSize()}")
+        for widget in QApplication.allWidgets():
+            widget.setFont(new_font)
+            widget.update()
+
+    def eventFilter(self, obj, event):
+        if isinstance(event, QWheelEvent):
+            if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                # Handle zooming
+                if event.angleDelta().y() > 0:
+                    LOG.debug("Zooming in")
+                    self.zoomIn()
+                    # Zoom in logic here
+                else:
+                    LOG.debug("Zooming out")
+                    self.zoomOut()
+                    # Zoom out logic here
+                return True  # Event handled
+        elif isinstance(event, QKeyEvent):
+            if event.key() == Qt.Key.Key_Plus and event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                LOG.debug("Zooming in with Ctrl++")
+                self.zoomIn()
+                # Zoom in logic here
+                return True
+            elif event.key() == Qt.Key.Key_Minus and event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                LOG.debug("Zooming out with Ctrl+-")
+                self.zoomOut()
+                # Zoom out logic here
+                return True
+        return super().eventFilter(obj, event)
 
 class MainWindow(QWidget):
     def __init__(self,roolt_path: str = ""):
@@ -28,7 +77,10 @@ class MainWindow(QWidget):
 
         EventManager.subscribe(BuiltInEvents.VISUAL_READY,self.createVisual)
 
+        self.installEventFilter(ScrollCtlEventFilter(self))
         self.activeWindows = []
+
+
 
     def build_menu_bar(self):
         LOG.debug("Building menu bar")

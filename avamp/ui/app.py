@@ -23,11 +23,6 @@ def main(root_path: str = ""):
     app.setApplicationName("Avamp")
     app.setStyleSheet(styles.dark())
 
-    new_font = app.font()
-    new_font.setPointSize( 12 )
-    new_font.setWeight( 4 )
-    app.setFont( new_font )
-
     main_window = MainWindow(roolt_path=root_path)
     main_window.setWindowFlags(main_window.windowFlags() | Qt.WindowType.MSWindowsOwnDC | Qt.WindowType.NoTitleBarBackgroundHint | Qt.WindowType.ExpandedClientAreaHint)
     main_window.show()
