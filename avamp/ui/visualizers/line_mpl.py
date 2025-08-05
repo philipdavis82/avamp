@@ -15,17 +15,20 @@ class LineMpl(QWidget):
 
         self.canvas = MplCanvas(self, width, height, dpi)
         self.navbar = self.canvas.navbar()
+        self.createMenuBar()
 
         # canvas.axes is the matplotlib Axes object
         self.canvas.axes.set_title("Line Plot")
         self.canvas.axes.set_xlabel(data._x_name)
         self.canvas.axes.set_ylabel(data._y_name)
+        self.canvas.axes.grid(True)
+        # self.canvas.axes.legend()
+        self.canvas.figure.tight_layout()
         self.plot(data.x, data.y)
 
         self._layout.addWidget(self.canvas, 0, 0)
         self._layout.addWidget(self.navbar, 1, 0)
-        self.createMenuBar()
-
+        
         LOG.debug(f"LineMpl visualizer created for {data.name()} from {filename}")
     
     def createMenuBar(self):
@@ -36,7 +39,6 @@ class LineMpl(QWidget):
         self.layout().setMenuBar(self.menu_bar)
 
     def plot(self, x, y):
-        self.canvas.axes.clear()
         self.canvas.axes.plot(x, y)
         self.canvas.draw()
     
