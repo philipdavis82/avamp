@@ -14,23 +14,23 @@ class _Logger:
         return f"{level:5s}: {self.getCallerInfo()}"
 
     def debug(self, message):
-        log_entry = f"{self.getPreamble("DEBUG"):50s}: {message}"
+        log_entry = f'{self.getPreamble("DEBUG"):50s}: {message}'
         self.logs.append(log_entry)
         print(log_entry)
     def info(self, message):
-        log_entry = f"{self.getPreamble("INFO"):50s}: {message}"
+        log_entry = f'{self.getPreamble("INFO"):50s}: {message}'
         self.logs.append(log_entry)
         print(log_entry)
     def warning(self, message):
-        log_entry = f"{self.getPreamble("WARN"):50s}: {message}"
+        log_entry = f'{self.getPreamble("WARN"):50s}: {message}'
         self.logs.append(log_entry)
         print(log_entry)
     def error(self, message):
-        log_entry = f"{self.getPreamble("ERROR"):50s}: {message}"
+        log_entry = f'{self.getPreamble("ERROR"):50s}: {message}'
         self.logs.append(log_entry)
         print(log_entry)
     def critical(self, message):
-        log_entry = f"{self.getPreamble("FATAL"):50s}: {message}"
+        log_entry = f'{self.getPreamble("FATAL"):50s}: {message}'
         self.logs.append(log_entry)
         print(log_entry)
 

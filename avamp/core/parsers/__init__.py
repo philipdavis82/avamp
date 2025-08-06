@@ -6,7 +6,7 @@ import os,glob
 ACTIVE_PARSERS = {}
 PARSERS = {}
 BASE_SEARCH_PATH = os.path.dirname(__file__)
-LOG.debug(f"{os.path.join(BASE_SEARCH_PATH, "**/*.py")} - Loading parser modules...")
+LOG.debug(f'{os.path.join(BASE_SEARCH_PATH, "**/*.py")} - Loading parser modules...')
 for file in glob.glob(os.path.join(BASE_SEARCH_PATH, "**/*.py"), recursive=True):
     LOG.debug(f"Loading parser module: {file}")
     if os.path.split(file)[-1].startswith("parser_"):
