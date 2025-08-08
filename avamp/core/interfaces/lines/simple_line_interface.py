@@ -53,3 +53,28 @@ class SimpleLineInterface (BaseInterface):
         """
         return self._y
     
+    def serialize(self) -> str:
+        """
+        Serializes data to a csv string.
+        """
+        lines = [f"{self._x_name},{self._y_name}"]
+        for x, y in zip(self._x, self._y):
+            lines.append(f"{x},{y}")
+        return "\n".join(lines)
+    
+    def deserialize(self, data):
+        """
+        Deserializes data from a csv string.
+        """
+        lines = data.strip().split("\n")
+        header = lines[0].split(",")
+        self._x_name = header[0]
+        self._y_name = header[1]
+        x, y = [], []
+        for line in lines[1:]:
+            values = line.split(",")
+            x.append(float(values[0]))
+            y.append(float(values[1]))
+        self._x = x
+        self._y = y
+        

@@ -39,3 +39,26 @@ for file in glob.glob(os.path.join(BASE_SEARCH_PATH, "**/*.py"), recursive=True)
             raise ImportError(f"Module {module_name} does not have required attributes PARSER_EXT and PARSER_CLS and PARSER_NAME.")
 
 __all__ = ["PARSERS"]
+
+
+
+# Parser Interfaces
+
+def extensions():
+    """Returns a list of all parser extensions."""
+    return list(PARSERS.keys())
+
+def by_extension(ext):
+    """Returns the parser class for a given extension."""
+    if ext in PARSERS:
+        return PARSERS[ext]
+    else:
+        raise ValueError(f"No parser found for extension: {ext}")
+
+def set_active_parser(ext, parser:object):
+    """Sets the active parser for a given extension."""
+    if ext in ACTIVE_PARSERS:
+        ACTIVE_PARSERS[ext] = parser
+        LOG.debug(f"Active parser for {ext} set to {parser}")
+    else:
+        raise ValueError(f"No parser found for extension: {ext}")

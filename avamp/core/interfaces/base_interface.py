@@ -36,3 +36,21 @@ class BaseInterface:
         :return: The data associated with the interface.
         """
         raise NotImplementedError("Subclasses must implement this method.")
+
+    def serialize(self) -> str:
+        """
+        Serialize the interface to a string representation.
+        This method should be implemented by subclasses to return a serialized form.
+        
+        :return: A string representing the serialized interface.
+        """
+        raise NotImplementedError("Subclasses must implement this method.")
+    
+    def deserialize(self, data: str):
+        """
+        Deserialize the interface from a string representation.
+        This method should be implemented by subclasses to restore the interface from a serialized form.
+        
+        :param data: A string representing the serialized interface.
+        """
+        raise NotImplementedError("Subclasses must implement this method.")
