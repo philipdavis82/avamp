@@ -1,6 +1,6 @@
 from avamp.core.logging import LOG
 from avamp.core.dispatcher import VisualDispatcher
-from avamp.core.interfaces.lines.simple_line_interface import SimpleLineInterface
+from avamp.core.interfaces.simple_line_interface import SimpleLineInterface
 from avamp.ui.visualizers.mpl.mpl_canvas import MplCanvas
 from avamp.ui.visualizers.mpl.mpl_trace  import MplTrace
 from PyQt6.QtWidgets import QWidget, QGridLayout,QMenuBar, QMenu, QApplication, QStatusBar, QSizePolicy
@@ -29,13 +29,11 @@ class CtlCopyEventFilter(QObject):
                     if obj._debouncer_ctlkey == "c": return True
                     obj.copy_to_clipboard()
                     obj._debouncer_ctlkey = "c"
-                    obj.status_bar.showMessage("Copied data to clipboard", 2000)
                     return True
                 elif event.key() == Qt.Key.Key_V:
                     if obj._debouncer_ctlkey == "v": return True
                     obj.paste_from_clipboard()
                     obj._debouncer_ctlkey = "v"
-                    obj.status_bar.showMessage("Pasted data from clipboard", 2000)
                     return True
                 else:
                     obj._debouncer_ctlkey = False
@@ -44,7 +42,6 @@ class CtlCopyEventFilter(QObject):
                     if obj._debouncer_ctlkey == "sc": return True    
                     obj.copy_image_to_clipboard()
                     obj._debouncer_ctlkey = "sc"
-                    obj.status_bar.showMessage("Copied image to clipboard", 2000)
                     return True
                 else:
                     obj._debouncer_ctlkey = False
@@ -84,6 +81,7 @@ class LineMpl(QWidget):
         """
         clipboard = QApplication.clipboard()
         clipboard.setText(self.serialize())
+        self.status_bar.showMessage("Copied data to clipboard", 2000)
 
     def paste_from_clipboard(self):
         """
@@ -93,8 +91,10 @@ class LineMpl(QWidget):
         data = clipboard.text()
         if data:
             self.deserialize(data)
+            self.status_bar.showMessage("Pasted data from clipboard", 2000)
         else:
             LOG.warning("Clipboard is empty or does not contain valid data.")
+            
     
     def copy_image_to_clipboard(self):
         """
@@ -110,6 +110,7 @@ class LineMpl(QWidget):
         image.loadFromData(imgdata.getvalue(), "PNG")
         clipboard.setImage(image)
         LOG.debug(f"Copied image to clipboard {image.size()} {image.format()}")
+        self.status_bar.showMessage("Copied image to clipboard", 2000)
         # clipboard.setImage(base64.b64decode(imgdata.getvalue()))
 
     def context_menue(self, pos):

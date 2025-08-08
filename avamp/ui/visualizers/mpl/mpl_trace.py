@@ -1,4 +1,4 @@
-from avamp.core.interfaces.lines.simple_line_interface import SimpleLineInterface
+from avamp.core.interfaces.simple_line_interface import SimpleLineInterface
 
 from matplotlib.lines import Line2D
 

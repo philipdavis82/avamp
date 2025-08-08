@@ -1,6 +1,6 @@
 from avamp.core.logging import LOG
 from avamp.core.parsers.base_parser import BaseParser
-from avamp.core.interfaces.lines.simple_line_interface import SimpleLineInterface
+from avamp.core.interfaces.simple_line_interface import SimpleLineInterface
 
 class SimpleCsvParser (BaseParser):
     """
