@@ -34,7 +34,6 @@ class Test3DScene (BaseParser):
         """
         super().__init__(file_path)
         self.file_path = file_path
-        self._headers = []
         self._raw_data = {}
         self._data = {}
 
@@ -84,6 +83,31 @@ class Test3DScene (BaseParser):
         :return: The name of the parser.
         """
         return self.__class__.__name__
+    
+    def keys(self) -> list[str]:
+        """
+        Return the keys of the parser, which are the headers of the JSON file.
+
+        :return: A list of headers from the JSON file.
+        """
+        return list(self._raw_data.keys())
+
+    def data(self, key) -> any:
+        """
+        Return the data associated with the parser, which is a dictionary of Scene3DInterface instances.
+        
+        :param key: The key to retrieve data for.
+        :return: A dictionary where keys are headers and values are Scene3DInterface instances.
+        """
+        return self._data.get(key, None)
+    
+    def __iter__(self):
+        """
+        Make the parser iterable, allowing iteration over the keys of the data.
+        
+        :return: An iterator over the keys of the data.
+        """
+        return iter(self._data.keys())
     
 
     
