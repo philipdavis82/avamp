@@ -1,9 +1,6 @@
+import csv,json,os,random
 
 def make_test_csv():
-    import csv
-    import os
-    import random
-
     # Define the path for the CSV file
     csv_file_path = os.path.join(os.path.dirname(__file__), 'test_data.csv')
 
@@ -25,6 +22,57 @@ def make_test_csv():
     print(f"Test CSV file created at: {csv_file_path}")
 
 
+def make_test_3d_scene():
+    scene = {}
+    scene['objects'] = []
+    scene['objects'].append({
+        'name': 'Cube1',
+        'type': 'cube',
+        'position': [0, 0, 0],
+        'size': [1, 1, 1],
+        'color': [1, 0, 0],
+        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
+        'scale': [1, 1, 1],
+        'visible': True,
+        'shape': 'cube',
+    })
+    scene['objects'].append({
+        'name': 'Cube2',
+        'type': 'cube',
+        'position': [2, 0, 0],
+        'size': [1, 1, 1],
+        'color': [0, 1, 0],
+        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
+        'scale': [1, 1, 1],
+        'visible': True,
+        'shape': 'cube',
+    })
+    scene['objects'].append({
+        'name': 'Cube3',
+        'type': 'cube',
+        'position': [-2, 0, 0],
+        'size': [1, 1, 1],
+        'color': [0, 0, 1],
+        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
+        'scale': [1, 1, 1],
+        'visible': True,
+        'shape': 'cube',
+    })
+    scene['name'] = 'Test Scene'
+    scene['camera'] = {
+        'position': [0, 0, 5],
+        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
+        'fov': 45,
+    }
+
+    # Save the scene to a file
+    import json 
+    scene_file_path = os.path.join(os.path.dirname(__file__), 'test_scene.json3d')
+    with open(scene_file_path, 'w') as f:
+        json.dump(scene, f, indent=4)
+    print(f"Test 3D scene created at: {scene_file_path}")
+
 if __name__ == "__main__":
     make_test_csv()
+    make_test_3d_scene()
     print("Test data generation complete.")

@@ -5,3 +5,4 @@
 *.csv
 
 env/*
+*.json3d
