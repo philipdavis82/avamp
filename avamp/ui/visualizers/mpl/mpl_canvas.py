@@ -1,7 +1,7 @@
 
-from PyQt6.QtWidgets import QApplication, QWidget
-from PyQt6.QtCore import QObject, QEvent, Qt
-from PyQt6.QtGui import QWheelEvent, QKeyEvent
+from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtCore import QObject, QEvent, Qt
+from PySide6.QtGui import QWheelEvent, QKeyEvent
 
 
 from matplotlib.backends.backend_qtagg  import FigureCanvasQTAgg as FigureCanvas, NavigationToolbar2QT as NavigationToolbar

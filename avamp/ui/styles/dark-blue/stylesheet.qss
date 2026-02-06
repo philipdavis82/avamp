@@ -702,7 +702,7 @@ QSizeGrip
 
 /**
  *  Set the separator to be transparent, since the dock has a border.
- *  On PyQt6, neither the border nor the background seem to be respected.
+ *  On PySide6, neither the border nor the background seem to be respected.
  */
 QMainWindow::separator
 {

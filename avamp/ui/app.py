@@ -4,9 +4,9 @@ from avamp.ui.styles             import styles
 from avamp.ui                    import visualizers  # Ensure visualizers are registered
 from avamp.ui.assets             import assets
 
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtCore    import Qt, QLoggingCategory
-from PyQt6.QtGui     import QWindow,QFont,QFontDatabase
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore    import Qt, QLoggingCategory
+from PySide6.QtGui     import QWindow,QFont,QFontDatabase
 
 import os
 

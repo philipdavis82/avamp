@@ -1,9 +1,9 @@
 from avamp.core.logging import LOG
 from avamp.core.event_manager import EventManager,BuiltInEvents
 
-from PyQt6.QtWidgets import QTreeView, QWidget
-from PyQt6.QtGui import QFileSystemModel
-from PyQt6.QtWidgets import QVBoxLayout
+from PySide6.QtWidgets import QTreeView, QWidget
+from PySide6.QtWidgets import QFileSystemModel
+from PySide6.QtWidgets import QVBoxLayout
 
 
 

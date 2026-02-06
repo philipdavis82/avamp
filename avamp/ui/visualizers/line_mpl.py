@@ -3,9 +3,9 @@ from avamp.core.dispatcher import VisualDispatcher
 from avamp.core.interfaces.simple_line_interface import SimpleLineInterface
 from avamp.ui.visualizers.mpl.mpl_canvas import MplCanvas
 from avamp.ui.visualizers.mpl.mpl_trace  import MplTrace
-from PyQt6.QtWidgets import QWidget, QGridLayout,QMenuBar, QMenu, QApplication, QStatusBar, QSizePolicy
-from PyQt6.QtCore import QEvent, Qt, QObject
-from PyQt6.QtGui import QImage, QContextMenuEvent, QKeyEvent
+from PySide6.QtWidgets import QWidget, QGridLayout,QMenuBar, QMenu, QApplication, QStatusBar, QSizePolicy
+from PySide6.QtCore import QEvent, Qt, QObject
+from PySide6.QtGui import QImage, QContextMenuEvent, QKeyEvent
 import os
 import io
 import base64

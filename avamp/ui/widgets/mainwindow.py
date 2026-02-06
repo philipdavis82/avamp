@@ -7,10 +7,10 @@ from avamp.ui.widgets.utility.datalist    import DataList
 from avamp.ui.styles import styles
 
 
-from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtGui     import QWheelEvent, QKeyEvent
-from PyQt6.QtCore    import Qt, QObject
+from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui     import QWheelEvent, QKeyEvent
+from PySide6.QtCore    import Qt, QObject
 
 class ScrollCtlEventFilter(QObject):
     def zoomIn(self):

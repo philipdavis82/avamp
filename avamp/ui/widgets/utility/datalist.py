@@ -3,8 +3,8 @@ from avamp.core.parsers.base_parser import BaseParser
 from avamp.core.parsers import PARSERS,ACTIVE_PARSERS
 from avamp.core.event_manager import EventManager, BuiltInEvents
 
-from PyQt6.QtWidgets import QWidget, QGridLayout, QMenuBar, QTreeWidget, QTreeWidgetItem, QMenu
-from PyQt6.QtCore import QObject, QEvent, QEventLoop, QPoint
+from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar, QTreeWidget, QTreeWidgetItem, QMenu
+from PySide6.QtCore import QObject, QEvent, QEventLoop, QPoint
 
 import os
 
