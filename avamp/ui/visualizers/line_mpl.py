@@ -65,10 +65,15 @@ class LineMpl(QWidget):
 
         self.activePlots = []
 
-        if data:
+        if data.type() == "line":
             self.setWindowTitle(f"Line Plot - {data.name()} ({os.path.split(filename)[-1]})")
             self.initialize_from_interface(data)
             LOG.debug(f"LineMpl visualizer created for {data.name()} from {filename}")
+        elif data.type() == "multi_line":
+            self.setWindowTitle(f"Multi Line Plot - {data.name()} ({os.path.split(filename)[-1]})")
+            for line in data._lines:
+                self.add_from_interface(line)
+            LOG.debug(f"LineMpl visualizer created for {data.name()} from {filename} with {len(data._lines)} lines")
         else:
             LOG.debug("LineMpl visualizer created without data")
 
@@ -240,3 +245,4 @@ class LineMpl(QWidget):
 
     
 VisualDispatcher.add_visual(LineMpl, "line")
+VisualDispatcher.add_visual(LineMpl, "multi_line")

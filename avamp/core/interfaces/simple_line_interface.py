@@ -1,4 +1,7 @@
 from avamp.core.interfaces.base_interface import BaseInterface
+from typing import Self, List
+from avamp.core.logging import LOG
+
 class SimpleLineInterface (BaseInterface):
     """
     Interface for simple line operations.
@@ -77,4 +80,19 @@ class SimpleLineInterface (BaseInterface):
             y.append(float(values[1]))
         self._x = x
         self._y = y
+
+    def combine(self, others:List[Self]):
+        from avamp.core.interfaces.multi_line_interface import MultiLineInterface
+        """
+        Combine this line interface with other line interfaces.
+        :param others: A list of other SimpleLineInterface instances to combine with.
+        :return: A list of combined SimpleLineInterface instances.
+        """
+        combined = [self]
+        for other in others:
+            if other.type() == "line":
+                combined.append(other)
+            else:
+                LOG.warning(f"Cannot combine with non-line interface: {other.type()}")
+        return MultiLineInterface(combined)
         

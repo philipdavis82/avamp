@@ -84,6 +84,7 @@ class DataList(QTreeWidget):
             self.addTopLevelItem(parent)
             self.treemap[filename] = parent
             for item in data:
+                LOG.debug(f"Adding item to data list: {item}")
                 tree_item = QTreeWidgetItem(parent)
                 tree_item.setText(0, item)
         else:
@@ -93,7 +94,37 @@ class DataList(QTreeWidget):
         """Handle double-click events on items."""
         key = item.text(0)
         LOG.info(f"Item double-clicked: {key}")
+        if len(self.selectedItems()) > 1:
+            self.trigger_collected_visual(self.selectedItems())
+        else:
+            self.trigger_visual(item)
         
+    
+    def trigger_collected_visual(self, items):
+        data = []
+        for item in items:
+            if item.parent() is not None:
+                filename = item.parent().text(0)
+                if filename in self.openParsers:
+                    parser = self.openParsers[filename]
+                    data.append(parser.data(item.text(0)))
+                    LOG.info(f"Selected data: {item.text(0)} from file: {filename}")
+                else:
+                    LOG.warning(f"No parser found for item: {filename}")
+        if not data: 
+            LOG.warning("No data selected for combined visual")
+            return
+        collected_data = data[0].combine(data[1:])
+        LOG.info(f"Combined data: {collected_data.name()} from file: {filename}")
+        EventManager.trigger(
+            BuiltInEvents.DATA_SElECTED,
+            data=collected_data,
+            filename=filename,
+        )
+           
+
+    def trigger_visual(self, item):
+        key = item.text(0)
         if item.parent() is not None:
             filename = item.parent().text(0)
             if filename in self.openParsers:
@@ -107,3 +138,19 @@ class DataList(QTreeWidget):
                 )
             else:
                 LOG.warning(f"No parser found for item: {filename}")
+    ## Multiple line selections
+    # def get_selected_data(self):
+    #     selected_items = self.selectedItems()
+    #     selected_data = []
+    #     for item in selected_items:
+    #         if item.parent() is not None:
+    #             filename = item.parent().text(0)
+    #             key = item.text(0)
+    #             if filename in self.openParsers:
+    #                 parser = self.openParsers[filename]
+    #                 data = parser.data(key)
+    #                 selected_data.append(data)
+    #                 LOG.info(f"Selected data: {data.name()} from file: {filename}")
+    #             else:
+    #                 LOG.warning(f"No parser found for item: {filename}")
+    #     return selected_data
