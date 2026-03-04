@@ -1,5 +1,5 @@
 from avamp.core.logging import LOG
-from avamp.core.parsers.base_parser import BaseParser
+from avamp.core.parsers.base_parser import BaseParser, InterfaceGroup
 from avamp.core.parsers import PARSERS,ACTIVE_PARSERS
 from avamp.core.event_manager import EventManager, BuiltInEvents
 
@@ -7,6 +7,14 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar, QTreeWidget, QTree
 from PySide6.QtCore import QObject, QEvent, QEventLoop, QPoint
 
 import os
+
+#Custom tree item that can store additional data
+class DataTreeItem(QTreeWidgetItem):
+    def __init__(self, parent, key,interface,filename):
+        super().__init__(parent)
+        self.key = key
+        self.interface = interface
+        self.filename = filename
 
 class RightClickedFilter(QObject):
     def eventFilter(self, obj, event):
@@ -28,6 +36,7 @@ class DataList(QTreeWidget):
         super().__init__(parent)
         self.setHeaderLabels(["Name", "Type", "Size"])
         self.setColumnCount(3)
+        self.setColumnWidth(0, 200)
         self.setSortingEnabled(True)
         self.setAlternatingRowColors(True)
         self.setSelectionMode(QTreeWidget.SelectionMode.ExtendedSelection)
@@ -69,6 +78,19 @@ class DataList(QTreeWidget):
         action.triggered.connect(lambda: self.clear(item.text(0)))
         menu.exec(self.viewport().mapToGlobal(item.pos()))
 
+    def update_data_list_children(self, data: InterfaceGroup, parent: QTreeWidgetItem, filename:str):
+        for key, value in data: 
+            if isinstance(value, InterfaceGroup):
+                LOG.debug(f"Adding child item to data list: {key}")
+                tree_item = QTreeWidgetItem(parent)
+                tree_item.setText(0, key)
+                self.update_data_list_children(value, tree_item,filename)
+            else:
+                LOG.debug(f"Adding child item to data list: {key}")
+                tree_item = DataTreeItem(parent, key, value,filename)
+                tree_item.setText(0, key)
+                tree_item.setText(1, value.type())
+
     def update_data_list(self, filename):
         if filename in self.openParsers:
             LOG.info(f"Data list already updated for file: {filename}")
@@ -83,10 +105,17 @@ class DataList(QTreeWidget):
             parent = QTreeWidgetItem(self,[filename, ext])
             self.addTopLevelItem(parent)
             self.treemap[filename] = parent
-            for item in data:
-                LOG.debug(f"Adding item to data list: {item}")
-                tree_item = QTreeWidgetItem(parent)
-                tree_item.setText(0, item)
+            for key,value in data:
+                if(isinstance(value, InterfaceGroup)):
+                    LOG.debug(f"Adding interface group to data list: {key}")
+                    tree_item = QTreeWidgetItem(parent)
+                    tree_item.setText(0, key)
+                    self.update_data_list_children(value, tree_item,filename)
+                else:
+                    LOG.debug(f"Adding item to data list: {key}")
+                    tree_item = DataTreeItem(parent,key,value,filename)
+                    tree_item.setText(0, key)
+                    tree_item.setText(1, value.type())
         else:
             LOG.warning(f"No parser found for file extension: {ext}")
     
@@ -99,58 +128,38 @@ class DataList(QTreeWidget):
         else:
             self.trigger_visual(item)
         
-    
     def trigger_collected_visual(self, items):
         data = []
         for item in items:
             if item.parent() is not None:
-                filename = item.parent().text(0)
-                if filename in self.openParsers:
-                    parser = self.openParsers[filename]
-                    data.append(parser.data(item.text(0)))
-                    LOG.info(f"Selected data: {item.text(0)} from file: {filename}")
-                else:
-                    LOG.warning(f"No parser found for item: {filename}")
+                # filename = item.parent().text(0)
+                # if filename in self.openParsers:
+                    # parser = self.openParsers[filename]
+                data.append(item.interface)
+                LOG.info(f"Selected data: {item.text(0)} from file: {item.filename}")
+                # else:
+                    # LOG.warning(f"No parser found for item: {filename}")
         if not data: 
             LOG.warning("No data selected for combined visual")
             return
         collected_data = data[0].combine(data[1:])
-        LOG.info(f"Combined data: {collected_data.name()} from file: {filename}")
+        LOG.info(f"Combined data: {collected_data.name()} from file: {item.filename}")
         EventManager.trigger(
             BuiltInEvents.DATA_SElECTED,
             data=collected_data,
-            filename=filename,
-        )
-           
+            filename=item.filename,
+        )   
 
     def trigger_visual(self, item):
         key = item.text(0)
         if item.parent() is not None:
-            filename = item.parent().text(0)
-            if filename in self.openParsers:
-                parser = self.openParsers[filename]
+            # filename = item.parent().text(0)
+            # if filename in self.openParsers:
+                # parser = self.openParsers[filename]
                 # Here you can add logic to display the data or perform actions with the parser
-                LOG.info(f"Parser for {filename} is {parser.name()}")
-                EventManager.trigger(
-                    BuiltInEvents.DATA_SElECTED,
-                    data=parser.data(key),
-                    filename=filename,
-                )
-            else:
-                LOG.warning(f"No parser found for item: {filename}")
-    ## Multiple line selections
-    # def get_selected_data(self):
-    #     selected_items = self.selectedItems()
-    #     selected_data = []
-    #     for item in selected_items:
-    #         if item.parent() is not None:
-    #             filename = item.parent().text(0)
-    #             key = item.text(0)
-    #             if filename in self.openParsers:
-    #                 parser = self.openParsers[filename]
-    #                 data = parser.data(key)
-    #                 selected_data.append(data)
-    #                 LOG.info(f"Selected data: {data.name()} from file: {filename}")
-    #             else:
-    #                 LOG.warning(f"No parser found for item: {filename}")
-    #     return selected_data
+            LOG.info(f"Parser for {item.filename}, key: {key} selected")
+            EventManager.trigger(
+                BuiltInEvents.DATA_SElECTED,
+                data=item.interface,
+                filename=item.filename,
+            )

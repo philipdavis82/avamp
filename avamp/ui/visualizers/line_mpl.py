@@ -59,6 +59,7 @@ class LineMpl(QWidget):
         self.navbar = self.canvas.navbar()
         self.createMenuBar()
         self.createStatusBar()
+        
 
         self._layout.addWidget(self.canvas, 0, 0, 1, 2)
         self._layout.addWidget(self.navbar, 1, 0 , 1, 1)
@@ -151,11 +152,11 @@ class LineMpl(QWidget):
 
     def initialize_from_interface(self,interface):
         self.canvas.axes.set_title("Line Plot")
-        self.canvas.axes.set_xlabel(interface._x_name)
-        self.canvas.axes.set_ylabel(interface._y_name)
+        self.canvas.axes.set_xlabel(interface.x_name)
+        self.canvas.axes.set_ylabel(interface.y_name)
         self.canvas.axes.grid(True)
         self.canvas.figure.tight_layout()
-        trace = self.plot(interface.x, interface.y, label=interface._y_name)
+        trace = self.plot(interface.x, interface.y, label=interface.y_name)
         trace.set_interface(interface)
         self.activePlots.append(trace)
     
@@ -168,13 +169,14 @@ class LineMpl(QWidget):
         if not isinstance(interface, SimpleLineInterface):
             LOG.error("Invalid interface type. Expected SimpleLineInterface.")
             return
-
-        trace = self.plot(interface.x, interface.y, label=interface._y_name)
+        
+        trace = self.plot(interface.x, interface.y, label=interface.y_name)
         trace.set_interface(interface)
         self.activePlots.append(trace)
 
     def plot(self, x, y, *args, **kwargs) -> MplTrace:
         line = self.canvas.axes.plot(x, y, *args, **kwargs)
+        self.canvas.axes.legend(loc="best")
         self.canvas.draw()
         return MplTrace(line[0])
     

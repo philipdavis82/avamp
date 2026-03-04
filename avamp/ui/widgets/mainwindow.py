@@ -9,7 +9,7 @@ from avamp.ui.styles import styles
 
 from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui     import QWheelEvent, QKeyEvent
+from PySide6.QtGui     import QWheelEvent, QKeyEvent, QFont
 from PySide6.QtCore    import Qt, QObject
 
 class ScrollCtlEventFilter(QObject):
@@ -17,7 +17,7 @@ class ScrollCtlEventFilter(QObject):
         # app = QApplication.instance()
         new_font = QApplication.font()
         new_font.setPointSize( new_font.pointSize() + 2 )
-        new_font.setWeight( int(new_font.pointSize()/4) )
+        new_font.setWeight( QFont.Weight(int(new_font.pointSize()/4) )) 
         QApplication.setFont(new_font)
         LOG.debug(f"Zoomed in to font size {new_font.pointSize()}")
         for widget in QApplication.allWidgets():
@@ -27,7 +27,7 @@ class ScrollCtlEventFilter(QObject):
         # app = QApplication.instance()
         new_font = QApplication.font()
         new_font.setPointSize( new_font.pointSize() - 2 )
-        new_font.setWeight( int(new_font.pointSize()/4) )
+        new_font.setWeight( QFont.Weight(int(new_font.pointSize()/4) )) 
         QApplication.setFont(new_font)
         LOG.debug(f"Zoomed out to font size {new_font.pointSize()}")
         for widget in QApplication.allWidgets():

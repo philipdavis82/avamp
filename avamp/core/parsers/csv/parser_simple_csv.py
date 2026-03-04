@@ -1,5 +1,5 @@
 from avamp.core.logging import LOG
-from avamp.core.parsers.base_parser import BaseParser
+from avamp.core.parsers.base_parser import BaseParser, InterfaceGroup
 from avamp.core.interfaces.simple_line_interface import SimpleLineInterface
 from avamp.core.interfaces.multi_line_interface  import MultiLineInterface
 
@@ -85,9 +85,10 @@ class SimpleCsvParser (BaseParser):
             )
             LOG.debug(f"Found Data: {key}")
         
-        self._data['multi_line'] = MultiLineInterface([data for data in self._data.values() if data.type() == "line"])
-        
-        LOG.debug(self._data['multi_line'])
+        # Create a custom interface group for multi-line data to demonstrate nested interfaces
+        self._data['Custom'] = InterfaceGroup("Custom", {
+            'multi_line' : MultiLineInterface([data for data in self._data.values() if data.type() == "line"])
+        })
 
     
     def __iter__(self):
@@ -95,7 +96,7 @@ class SimpleCsvParser (BaseParser):
         Iterate over the keys items of the parser.
         :return: An iterator over the keys of the parser.
         """
-        return iter(self._data.keys())
+        return iter(self._data.items())
 
     
 

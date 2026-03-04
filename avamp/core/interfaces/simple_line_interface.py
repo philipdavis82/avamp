@@ -56,6 +56,24 @@ class SimpleLineInterface (BaseInterface):
         """
         return self._y
     
+    @property
+    def x_name(self):
+        """
+        Return the name of the x-coordinate.
+
+        :return: The name of the x-coordinate.
+        """
+        return self._x_name
+    @property
+    
+    def y_name(self):
+        """
+        Return the name of the y-coordinate.
+
+        :return: The name of the y-coordinate.
+        """
+        return self._y_name
+    
     def serialize(self) -> str:
         """
         Serializes data to a csv string.
