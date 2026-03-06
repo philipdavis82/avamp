@@ -107,7 +107,7 @@ class Test3DScene (BaseParser):
         
         :return: An iterator over the keys of the data.
         """
-        return iter(self._data.keys())
+        return iter(self._data.items())
     
 
     
