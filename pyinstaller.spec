@@ -5,7 +5,7 @@ added_files = [
     ('avamp/core/parsers/__init__.py','avamp/core/parsers/'),
     ('avamp/core/interfaces/*.py','avamp/core/interfaces/'),
     # Assets
-    ('avamp/ui/assets/assets.py','avamp/avamp/ui/assets/'),
+    ('avamp/ui/assets/assets.py','avamp/ui/assets/'),
     ('avamp/ui/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf','avamp/ui/assets/fonts/Roboto/'),
     # Styles
     ('avamp/ui/styles/styles.py','avamp/ui/styles/'),
@@ -39,10 +39,10 @@ pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
-    a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
+    [],#a.scripts,
+    [],#a.binaries,
+    [],#a.zipfiles,
+    [],#a.datas,
     [],
     name='Avamp',
     debug=False,
