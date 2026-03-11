@@ -4,12 +4,13 @@ added_files = [
     ('avamp/core/parsers/csv/parser_simple_csv.py','avamp/core/parsers/csv/'),
     ('avamp/core/parsers/__init__.py','avamp/core/parsers/'),
     ('avamp/core/interfaces/*.py','avamp/core/interfaces/'),
+    # Assets
+    ('avamp/ui/assets/assets.py','avamp/avamp/ui/assets/'),
+    ('avamp/ui/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf','avamp/ui/assets/fonts/Roboto/'),
     # Styles
-    ('avamp/avamp/ui/assets/assets.py','avamp/avamp/ui/assets/'),
+    ('avamp/ui/styles/styles.py','avamp/ui/styles/'),
     ('avamp/ui/styles/dark-blue/*','avamp/ui/styles/dark-blue/'),
     ('avamp/ui/styles/dark/stylesheet.qss','avamp/ui/styles/dark/'),
-    ('avamp/ui/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf','avamp/ui/assets/fonts/Roboto/'),
-
 ]
 
 options = [
