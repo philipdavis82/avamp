@@ -59,6 +59,9 @@ class LineMpl(QWidget):
         self.navbar = self.canvas.navbar()
         self.createMenuBar()
         self.createStatusBar()
+
+        # Setup Axes Flags
+        self.canvas.axes.grid(True)
         
 
         self._layout.addWidget(self.canvas, 0, 0, 1, 2)
@@ -154,7 +157,6 @@ class LineMpl(QWidget):
         self.canvas.axes.set_title("Line Plot")
         self.canvas.axes.set_xlabel(interface.x_name)
         self.canvas.axes.set_ylabel(interface.y_name)
-        self.canvas.axes.grid(True)
         self.canvas.figure.tight_layout()
         trace = self.plot(interface.x, interface.y, label=interface.y_name)
         trace.set_interface(interface)

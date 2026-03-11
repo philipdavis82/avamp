@@ -24,6 +24,12 @@ class FileBrowser(QTreeView):
         # Callbacks
         self.doubleClicked.connect(self.on_item_clicked)
 
+    def setRootPath(self, path: str):
+        """Set the root path of the file browser."""
+        LOG.debug(f"Setting root path to: {path}")
+        self.model.setRootPath(path)
+        self.setRootIndex(self.model.index(path))
+
     def filter_by_extension(self, extensions: list[str]):
         """Filter the file browser to show only files with the specified extension."""
         # extensions = list(PARSERS.keys())

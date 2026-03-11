@@ -24,14 +24,14 @@ class AnimationScalePoint(AnimationPoint):
         super().__init__(timestamp)
         self.scale = scale
 
-class AnimatedSphere(Sphere):
-    def __init__(self, radius=1.0, userdata=None):
-        super().__init__(radius, userdata)
+# class AnimatedSphere(Sphere):
+#     def __init__(self, radius=1.0, userdata=None):
+#         super().__init__(radius, userdata)
 
-    def update(self):
+#     def update(self):
 
-    def draw(self):
-        # Update the position based on the angle
-        # self.position = (5 * cos(self.angle), 0, 5 * sin(self.angle))
-        # self.angle += 0.01  # Increment the angle for animation
-        super().draw()
+#     def draw(self):
+#         # Update the position based on the angle
+#         # self.position = (5 * cos(self.angle), 0, 5 * sin(self.angle))
+#         # self.angle += 0.01  # Increment the angle for animation
+#         super().draw()

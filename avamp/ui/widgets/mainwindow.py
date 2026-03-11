@@ -7,7 +7,7 @@ from avamp.ui.widgets.utility.datalist    import DataList
 from avamp.ui.styles import styles
 
 
-from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar
+from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar, QFileDialog
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui     import QWheelEvent, QKeyEvent, QFont
 from PySide6.QtCore    import Qt, QObject
@@ -87,7 +87,7 @@ class MainWindow(QWidget):
         # Here you can add menu items to the menubar
         self.file_menu = self.menue_bar.addMenu("File")
         self.file_menu.addAction("Open")
-        self.file_menu.addAction("Save")
+        self.file_menu.addAction("Directory", self.openDirectoryDialog)
         self.file_menu.addAction("Exit", self.close)
 
         self.view_menu = self.menue_bar.addMenu("View")
@@ -126,6 +126,32 @@ class MainWindow(QWidget):
         for window in self.activeWindows:
             window.close()
         event.accept()
+
+    def openFileDialog(self):
+        file_dialog = QFileDialog(self)
+        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+        if file_dialog.exec():
+            selected_files = file_dialog.selectedFiles()
+            if selected_files:
+                LOG.debug(f"Selected file: {selected_files[0]}")
+                for file in selected_files:
+                    EventManager.trigger(
+                        BuiltInEvents.FILE_SELECTED,
+                        filename=file
+                    )
+            else:
+                LOG.debug("No file selected.")
+        else:
+            LOG.debug("File dialog canceled.")
+
+    def openDirectoryDialog(self):
+        directory = QFileDialog.getExistingDirectory(self, "Select Directory")
+        if directory:
+            LOG.debug(f"Selected directory: {directory}")
+            self.file_browser.setRootPath(directory)
+        else:
+            LOG.debug("No directory selected.")
+
 
     def show(self):
         super().show()

@@ -110,7 +110,7 @@ class GlWidget(QOpenGLWidget):
 
 
 if __name__ == "__main__":
-    import avamp.ui.visualizers.QtGL.opengl_draw_functions as draw
+    import opengl_draw_functions as draw
     class MainWindow(QMainWindow):
         def __init__(self,glc):
             super().__init__()

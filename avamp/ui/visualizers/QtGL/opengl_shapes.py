@@ -1,32 +1,30 @@
+import numpy as np
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from avamp.ui.visualizers.QtGL.opengl_mesh import Mesh
 
-from avamp.ui.visualizers.QtGL import opengl_draw_functions as draw
-from avamp.ui.visualizers.QtGL.opengl_drawlist import OglDrawList, OglDrawable
-
-
-class Sphere (OglDrawable):
-    def __init__(self, radius=1.0, userdata=None):
-        self.radius     = radius
-        self.position   = (0,0,0)
-        self.rotation   = (0,0,0)
-        self.color      = (0.0, 1.0, 1.0, 1.0)
-        self.lines      = False
-        self.userdata    = userdata
-
-    def draw(self):
-        draw.sphere(self.radius, self.position, self.color, self.rotation, self.lines)
-
-class Cube (OglDrawable):
-    def __init__(self, size=1.0, userdata=None):
-        self.size = size
-        self.position   = (0,0,0)
-        self.rotation   = (0,0,0)
-        self.color      = (1.0, 0.0, 0.0, 1.0)
-        self.lines      = False
-        self.userdata    = userdata
-
-    def draw(self):
-        draw.cube(self.size, self.position, self.color, self.rotation, self.lines)
-
+class Sphere(Mesh):
+    def __init__(self, radius=1.0):
+        # Create a UV sphere mesh
+        vertices = []
+        faces = []
+        stacks = 20
+        slices = 20
+        for i in range(stacks + 1):
+            phi = np.pi * i / stacks
+            for j in range(slices + 1):
+                theta = 2 * np.pi * j / slices
+                x = radius * np.sin(phi) * np.cos(theta)
+                y = radius * np.cos(phi)
+                z = radius * np.sin(phi) * np.sin(theta)
+                vertices.append((x, y, z))
         
-    
-    
+        for i in range(stacks):
+            for j in range(slices):
+                first = i * (slices + 1) + j
+                second = first + slices + 1
+                faces.append((first, second, first + 1))
+                faces.append((second, second + 1, first + 1))
+
+        super().__init__(vertices, faces, color=(0.5, 0.5, 0.5, 1.0), lines=False)
+        
