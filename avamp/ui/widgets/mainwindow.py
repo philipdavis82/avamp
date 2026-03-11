@@ -6,8 +6,8 @@ from avamp.ui.widgets.utility.filebrowser import FileBrowser
 from avamp.ui.widgets.utility.datalist    import DataList
 from avamp.ui.styles import styles
 
-
-from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar, QFileDialog
+# Import 
+from PySide6.QtWidgets import QWidget, QGridLayout, QMenuBar, QFileDialog, QSplitter
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui     import QWheelEvent, QKeyEvent, QFont
 from PySide6.QtCore    import Qt, QObject
@@ -72,6 +72,11 @@ class MainWindow(QWidget):
         self.layout.setSpacing(0)   
         self.setLayout(self.layout)
 
+        # Add Splitter
+        self.splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.layout.addWidget(self.splitter, 0, 0, 1, 2)
+        
+
         self.build_menu_bar()
         self.add_file_browser(roolt_path)
         self.add_data_list()
@@ -86,7 +91,7 @@ class MainWindow(QWidget):
         self.menue_bar = QMenuBar(self)
         # Here you can add menu items to the menubar
         self.file_menu = self.menue_bar.addMenu("File")
-        self.file_menu.addAction("Open")
+        self.file_menu.addAction("Open", self.openFileDialog)
         self.file_menu.addAction("Directory", self.openDirectoryDialog)
         self.file_menu.addAction("Exit", self.close)
 
@@ -103,13 +108,15 @@ class MainWindow(QWidget):
         LOG.debug(f"Adding file browser with root path: {root_path}")
         self.file_browser = FileBrowser(parent=self, root_path=root_path)
         self.file_browser.filter_by_extension(list(PARSERS.keys()))
-        self.layout.addWidget(self.file_browser, 0, 0, 1, 1)
+        # self.layout.addWidget(self.file_browser, 0, 0, 1, 1)
+        self.splitter.addWidget(self.file_browser)
         LOG.info("File browser added to main window layout.")
 
     def add_data_list(self):
         LOG.debug("Adding data list widget")
         self.data_list = DataList(parent=self)
-        self.layout.addWidget(self.data_list, 0, 1, 1, 1)
+        # self.layout.addWidget(self.data_list, 0, 1, 1, 1)
+        self.splitter.addWidget(self.data_list)
         LOG.info("Data list added to main window layout.")
 
     def createVisual(self, visual:object, data:str, filename:str):
@@ -129,7 +136,12 @@ class MainWindow(QWidget):
 
     def openFileDialog(self):
         file_dialog = QFileDialog(self)
-        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+        # Allow for multiple files
+        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
+        file_dialog.setNameFilters(["All Files (*.*)"] + [f"{ext.upper()} Files (*{ext})" for ext in PARSERS.keys()])
+        file_dialog.setViewMode(QFileDialog.ViewMode.Detail)
+        file_dialog.setOption(QFileDialog.Option.DontUseNativeDialog, True)  # Use Qt's built-in dialog for better styling
+        file_dialog.setWindowTitle("Select File(s) to Open")
         if file_dialog.exec():
             selected_files = file_dialog.selectedFiles()
             if selected_files:
