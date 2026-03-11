@@ -66,7 +66,10 @@ class SimpleCsvParser (BaseParser):
                         self._headers.append(key)
                     if key not in self._raw_data:
                         self._raw_data[key] = []
-                    self._raw_data[key].append(float(value))
+                    try:
+                        self._raw_data[key].append(float(value))
+                    except ValueError:
+                        LOG.warning(f"Non-numeric value '{value}' found in column '{key}'. Skipping this value.")
     
     def _create_interfaces(self):
         """
@@ -84,12 +87,13 @@ class SimpleCsvParser (BaseParser):
                 y_name=key
             )
             LOG.debug(f"Found Data: {key}")
-        
-        # Create a custom interface group for multi-line data to demonstrate nested interfaces
-        self._data['Custom'] = InterfaceGroup("Custom", {
-            'multi_line' : MultiLineInterface([data for data in self._data.values() if data.type() == "line"])
-        })
-
+        try:
+            # Create a custom interface group for multi-line data to demonstrate nested interfaces
+            self._data['Custom'] = InterfaceGroup("Custom", {
+                'multi_line' : MultiLineInterface([data for data in self._data.values() if data.type() == "line"])
+            })
+        except Exception as e:
+            ...
     
     def __iter__(self):
         """
