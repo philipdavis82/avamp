@@ -39,7 +39,7 @@ pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
-    [],#a.scripts,
+    a.scripts,
     [],#a.binaries,
     [],#a.zipfiles,
     [],#a.datas,
