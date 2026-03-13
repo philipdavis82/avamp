@@ -1,10 +1,15 @@
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from avamp.ui.visualizers.QtGL.opengl_mesh import Mesh
+
+try:
+    from avamp.ui.visualizers.QtGL.opengl_mesh import Mesh
+except ImportError:
+    from opengl_mesh import Mesh
 
 class Sphere(Mesh):
-    def __init__(self, radius=1.0):
+    def __init__(self, radius=1.0, *args, **kwargs):    
+        
         # Create a UV sphere mesh
         vertices = []
         faces = []
@@ -26,5 +31,5 @@ class Sphere(Mesh):
                 faces.append((first, second, first + 1))
                 faces.append((second, second + 1, first + 1))
 
-        super().__init__(vertices, faces, color=(0.5, 0.5, 0.5, 1.0), lines=False)
+        super().__init__(vertices, faces, *args, **kwargs)
         

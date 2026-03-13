@@ -2,16 +2,23 @@ import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-from avamp.ui.visualizers.QtGL.opengl_primitives import Transformation
-from avamp.ui.visualizers.QtGL.opengl_drawlist   import OglDrawable
+try:
+    from avamp.ui.visualizers.QtGL.opengl_primitives import Transformation
+    from avamp.ui.visualizers.QtGL.opengl_drawlist   import OglDrawable
+except ImportError:
+    from opengl_primitives import Transformation
+    from opengl_drawlist import OglDrawable
 
 class Mesh(OglDrawable):
-    def __init__(self, vertices, faces, color=(0.5, 0.5, 0.5, 1.0), lines=False):
+    def __init__(self, vertices, faces, color=(0.5, 0.5, 0.5, 1.0), position=(0,0,0), rotation=(0,0,0), scale=1.0, lines=False):
         self.vertices = vertices
         self.faces = faces
         self.color = color
         self.lines = lines
         self.trasformation = Transformation()
+        self.trasformation.position = position
+        self.trasformation.rotation = rotation
+        self.trasformation.scale = scale
         self.vertex_buffer = None
         self.face_buffer   = None
 

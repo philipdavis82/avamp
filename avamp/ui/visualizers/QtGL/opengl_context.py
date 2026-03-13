@@ -111,6 +111,7 @@ class GlWidget(QOpenGLWidget):
 
 if __name__ == "__main__":
     import opengl_draw_functions as draw
+    import opengl_shapes as shapes
     class MainWindow(QMainWindow):
         def __init__(self,glc):
             super().__init__()
@@ -122,5 +123,6 @@ if __name__ == "__main__":
     window = MainWindow(glc)
     glc.drawlist.add_drawable_function(draw.cube ,4, position=(0,0,0),lines=True) # Draw the red cube first
     glc.drawlist.add_drawable_function(draw.sphere ,1.0, position=(0,0,0), color=(0.0, 1.0, 1.0, .2)) # Draw the semi-transparent cyan sphere
+    glc.drawlist.add_drawable(shapes.Sphere(radius=2.0,position=(4,0,0))) # Draw the semi-transparent magenta sphere
     window.show()
     sys.exit(app.exec())
