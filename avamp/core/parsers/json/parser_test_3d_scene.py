@@ -57,6 +57,7 @@ class Test3DScene (BaseParser):
         objects = self._raw_data.get('objects', [])
         scene = Scene3DInterface()
         for obj in objects:
+            # LOG.debug(f"Creating object from JSON data: {obj}")
             name = obj.get('name', 'Unnamed')
             position = obj.get('position', [0, 0, 0])
             rotation = obj.get('rotation', [[1, 0, 0], [0, 1, 0], [0, 0, 1]])
@@ -67,8 +68,13 @@ class Test3DScene (BaseParser):
                 rotation=rotation,
                 scale=scale
             )
+            if(obj.get('color')):
+                new_obj.color = obj['color']
+            
+            new_obj.transforms = obj.get('transforms', {})
             if(obj.get('shape')):
                 new_obj.set_shape(obj['shape'])
+            scene._objects.append(new_obj)
         self._data['scene'] = scene
     
     

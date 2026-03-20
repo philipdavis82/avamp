@@ -10,14 +10,14 @@ import argparse
 def make_test_data():
     try:
         TEST_DATA = os.path.join(os.path.dirname(__file__), "testdata", "test_data.csv")
-        if(not os.path.exists(TEST_DATA)):
-            LOG.info("Test data not found, generating test data...")
-            LOG.info(f"Running: '{sys.executable} testdata{os.path.sep}make_test_data.py'")
-            print("")
-            print("Generation ...")
-            print("")
-            os.system(f"{sys.executable} testdata{os.path.sep}make_test_data.py")
-            print("")
+        # if(not os.path.exists(TEST_DATA)):
+        # LOG.info("Test data not found, generating test data...")
+        LOG.info(f"Running: '{sys.executable} testdata{os.path.sep}make_test_data.py'")
+        print("")
+        print("Generation ...")
+        print("")
+        os.system(f"{sys.executable} testdata{os.path.sep}make_test_data.py")
+        print("")
     except Exception as e:
         LOG.error(f"Error generating test data: {e}")
         sys.exit(1)

@@ -23,6 +23,7 @@ def make_test_csv():
 
 
 def make_test_3d_scene():
+    import math
     scene = {}
     scene['objects'] = []
     scene['objects'].append({
@@ -37,33 +38,24 @@ def make_test_3d_scene():
         'shape': 'cube',
     })
     scene['objects'].append({
-        'name': 'Cube2',
-        'type': 'cube',
-        'position': [2, 0, 0],
-        'size': [1, 1, 1],
-        'color': [0, 1, 0],
-        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
-        'scale': [1, 1, 1],
-        'visible': True,
-        'shape': 'cube',
-    })
-    scene['objects'].append({
-        'name': 'Cube3',
-        'type': 'cube',
+        'name': 'Sphere1',
+        'type': 'sphere',
         'position': [-2, 0, 0],
         'size': [1, 1, 1],
-        'color': [0, 0, 1],
+        'color': [0, 0, 1, 1],
         'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
         'scale': [1, 1, 1],
         'visible': True,
-        'shape': 'cube',
+        'shape': 'sphere',
+        'transforms':{
+            'time': [i*0.1 for i in range(200)],
+            'position': [
+                [ [math.sin(i*0.1), math.cos(i*0.1), 0] for i in range(200)]
+            ],
+        }
     })
     scene['name'] = 'Test Scene'
-    scene['camera'] = {
-        'position': [0, 0, 5],
-        'rotation': [[1, 0, 0],[0, 1, 0],[0, 0, 1]],
-        'fov': 45,
-    }
+    
 
     # Save the scene to a file
     import json 

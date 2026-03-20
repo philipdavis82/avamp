@@ -3,6 +3,8 @@ from avamp.core.logging import LOG
 from avamp.core.dispatcher import VisualDispatcher
 
 # Type Imports
+from avamp.ui.visualizers.QtGL.opengl_mesh    import Mesh
+from avamp.ui.visualizers.QtGL.opengl_shapes  import Sphere
 from avamp.ui.visualizers.QtGL.opengl_scene   import GLScene
 from avamp.ui.visualizers.QtGL.opengl_context import GlWidget
 from avamp.core.interfaces.scene_3d_interface import Scene3DInterface
@@ -50,6 +52,8 @@ class SimpleOglVisualizer (QWidget):
         self.scene = GLScene()
         if data:
             self.parseData(data)
+        
+        self._glWidget.drawlist = self.scene.drawlist
 
     def parseData(self, data):
         """
@@ -70,6 +74,15 @@ class SimpleOglVisualizer (QWidget):
         :param scene: The Scene3DInterface instance to be parsed.
         """
         LOG.debug("Parsing Scene3DInterface data for SimpleOglVisualizer.")
+
+        for obj in scene.objects():
+            if obj.type() == "sphere":
+                LOG.debug(f"Adding sphere object to scene: {obj.name}")
+                self.scene.add_object(Sphere(radius=obj.shape.radius , color=obj.color, position=obj.position, rotation=obj.rotation, scale=obj.scale))
+            elif obj.type() == "cube":
+                LOG.warning("Cube shape is not yet implemented in SimpleOglVisualizer.")
+            else:
+                LOG.warning(f"Unsupported object type: {obj.type()}")
         
         
         

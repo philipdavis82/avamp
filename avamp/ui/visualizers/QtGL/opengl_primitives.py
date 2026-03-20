@@ -22,21 +22,26 @@ class Transformation:
     
     @rotation.setter
     def rotation(self, value):
-        # This is a simplified way to set rotation, it does not handle all cases (like gimbal lock)
-        rx, ry, rz = np.radians(value)
-        Rx = np.array([[1, 0, 0],
-                       [0, np.cos(rx), -np.sin(rx)],
-                       [0, np.sin(rx), np.cos(rx)]])
-        
-        Ry = np.array([[np.cos(ry), 0, np.sin(ry)],
-                       [0, 1, 0],
-                       [-np.sin(ry), 0, np.cos(ry)]])
-        
-        Rz = np.array([[np.cos(rz), -np.sin(rz), 0],
-                       [np.sin(rz), np.cos(rz), 0],
-                       [0, 0, 1]])
-        
-        self.matrix[0:3, 0:3] = Rz @ Ry @ Rx @ self.matrix[0:3, 0:3]
+        if np.shape(value) == (3,):
+            # This is a simplified way to set rotation, it does not handle all cases (like gimbal lock)
+            rx, ry, rz = np.radians(value)
+            Rx = np.array([[1, 0, 0],
+                        [0, np.cos(rx), -np.sin(rx)],
+                        [0, np.sin(rx), np.cos(rx)]])
+            
+            Ry = np.array([[np.cos(ry), 0, np.sin(ry)],
+                        [0, 1, 0],
+                        [-np.sin(ry), 0, np.cos(ry)]])
+            
+            Rz = np.array([[np.cos(rz), -np.sin(rz), 0],
+                        [np.sin(rz), np.cos(rz), 0],
+                        [0, 0, 1]])
+            
+            self.matrix[0:3, 0:3] = Rz @ Ry @ Rx @ self.matrix[0:3, 0:3]
+        elif np.shape(value) == (3, 3):
+            self.matrix[0:3, 0:3] = value
+        else:
+            raise ValueError("Rotation must be either a tuple of 3 angles (rx, ry, rz) or a 3x3 rotation matrix.")
     
     @property
     def scale(self):

@@ -9,6 +9,10 @@ class Scene3DInterface(BaseInterface):
             """
             def __init__(self, radius: float = 1.0):
                 self.radius = radius
+
+            def type(self) -> str:
+                return "sphere"
+            
         class ShapeCube:
             """
             Represents a cube shape in 3D space.
@@ -17,6 +21,9 @@ class Scene3DInterface(BaseInterface):
                 self.width = width
                 self.height = height
                 self.depth = depth
+            
+            def type(self) -> str:
+                return "cube"
 
         """
         Represents a 3D object in the scene.
@@ -28,10 +35,11 @@ class Scene3DInterface(BaseInterface):
             self.scale      = scale    # list of 3D scale factors (sx, sy, sz)
             self.visible    = []
             self.shape      = None
-            self.color      = None
+            self.color      = [ .5, .5, .5, 1] # RGBA color
             self.material   = None
             self.mesh       = None  # Placeholder for mesh data
             self.instances  = []  # Placeholder for instances of the object, non zero if the object is instanced
+            self.transforms = {}  # Placeholder for transform data, non empty if the object has animated transforms
         
         def create_instance(self) -> list[list[float]]:
             """
@@ -41,18 +49,31 @@ class Scene3DInterface(BaseInterface):
             """
             return [[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]]  # Identity matrix as a placeholder
 
-        def set_shape(self, shape: str,*args, **kwargs):
+        def type(self) -> str: 
+            """
+            Return the type of the 3D object.
+
+            :return: The type of the 3D object.
+            """
+            return self.shape.type() if self.shape else "mesh"
+
+        def set_shape(self, shape: str|ShapeCube|ShapeSphere,*args, **kwargs):
             """
             Set the shape of the 3D object.
 
             :param shape: The shape type (e.g., 'sphere', 'cube').
             """
-            if shape == 'sphere':
-                self.shape = self.ShapeSphere(*args, **kwargs)
-            elif shape == 'cube':
-                self.shape = self.ShapeCube(*args, **kwargs)
+            if isinstance(shape, str):
+                if shape == 'sphere':
+                    self.shape = self.ShapeSphere(*args, **kwargs)
+                elif shape == 'cube':
+                    self.shape = self.ShapeCube(*args, **kwargs)
+                else:
+                    LOG.error(f"Unknown shape type: {shape}")
+            elif isinstance(shape, self.ShapeSphere) or isinstance(shape, self.ShapeCube):
+                self.shape = shape
             else:
-                LOG.error(f"Unknown shape type: {shape}")
+                LOG.error(f"Invalid shape instance: {shape}")
         
     """
     Interface for 3D scene operations.
@@ -67,6 +88,7 @@ class Scene3DInterface(BaseInterface):
         """
         super().__init__()
         self._objects = objects if objects is not None else []
+        self._sprites = []  # Placeholder for sprite data
 
     def type(self) -> str:
         """
@@ -83,6 +105,14 @@ class Scene3DInterface(BaseInterface):
         :return: The name of the interface.
         """
         return self.__class__.__name__
+    
+    def objects(self) -> list[Object3D]:
+        """
+        Return the list of objects in the 3D scene.
+
+        :return: A list of Object3D instances.
+        """
+        return self._objects
     
     def create_object(self) -> Object3D:
         """
